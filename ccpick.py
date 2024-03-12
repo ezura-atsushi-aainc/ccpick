@@ -9,22 +9,26 @@ import sys
 argparser = argparse.ArgumentParser(description='Cyclomatic Complexity Finder')
 
 argparser.add_argument('--csv', action='store_true', help='Enable CSV output', required=False)
+argparser.add_argument('--phpmd-path', type=str, help='Path to phpmd command', required=False, default=None)
 argparser.add_argument('--repo-root', type=str, help='Target repository root', required=True)
 argparser.add_argument('--threshold', type=int, help='Threshold of cyclomatic complexity for checking', required=False, default=10)
 args = argparser.parse_args()
 
 enableCsv: bool = args.csv
+phpmdPath: str = args.phpmd_path
 repoRoot: str = args.repo_root
 ccThreshold: int = args.threshold
 
 dir = Path(repoRoot)
 php_files = dir.rglob('*.php')
 
+phpmdBinPath = ('' if phpmdPath is None else phpmdPath + '/') + 'phpmd'
+
 # Initialize for report violations
 class_cyclomatic_complexity = {}
 
 for php_file in php_files:
-    result: Dict[str, Any] = subprocess.run(['phpmd', php_file, 'json', 'codesize'], capture_output=True, text=True)
+    result: Dict[str, Any] = subprocess.run([phpmdBinPath, php_file, 'json', 'codesize'], capture_output=True, text=True)
     ripped_result: Dict[str, Any] = json.loads(result.stdout)['files']
     if not ripped_result:
         continue
