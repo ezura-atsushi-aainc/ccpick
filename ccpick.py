@@ -8,10 +8,12 @@ import sys
 
 argparser = argparse.ArgumentParser(description='Cyclomatic Complexity Finder')
 
+argparser.add_argument('--csv', action='store_true', help='Enable CSV output', required=False)
 argparser.add_argument('--repo-root', type=str, help='Target repository root', required=True)
 argparser.add_argument('--threshold', type=int, help='Threshold of cyclomatic complexity for checking', required=False, default=10)
 args = argparser.parse_args()
 
+enableCsv: bool = args.csv
 repoRoot: str = args.repo_root
 ccThreshold: int = args.threshold
 
@@ -49,7 +51,7 @@ for php_file in php_files:
                 class_cyclomatic_complexity[cc_name] = cc
 
 for name, cc in sorted(class_cyclomatic_complexity.items()):
-    print(f'{name}: {cc}')
-
-# Output sample
-# {'version': '2.14.1snapshot202309281310', 'package': 'phpmd', 'timestamp': '2024-01-26T09:54:26+00:00', 'files': [{'file': '/Users/ezura.atsushi/repos/letro/main/letro/app/Services/AdvertiserService.php', 'violations': [{'beginLine': 899, 'endLine': 965, 'package': 'App\\Services', 'function': None, 'class': 'AdvertiserService', 'method': 'getDailyLapByKpi', 'description': 'The method getDailyLapByKpi() has a Cyclomatic Complexity of 21. The configured cyclomatic complexity threshold is 15.', 'rule': 'CyclomaticComplexity', 'ruleSet': 'Code Size Rules', 'externalInfoUrl': 'https://phpmd.org/rules/codesize.html#cyclomaticcomplexity', 'priority': 1}, {'beginLine': 1181, 'endLine': 1239, 'package': 'App\\Services', 'function': None, 'class': 'AdvertiserService', 'method': 'calculateDailyUgcSetAbtestPatterns', 'description': 'The method calculateDailyUgcSetAbtestPatterns() has a Cyclomatic Complexity of 16. The configured cyclomatic complexity threshold is 15.', 'rule': 'CyclomaticComplexity', 'ruleSet': 'Code Size Rules', 'externalInfoUrl': 'https://phpmd.org/rules/codesize.html#cyclomaticcomplexity', 'priority': 1}, {'beginLine': 1241, 'endLine': 1292, 'package': 'App\\Services', 'function': None, 'class': 'AdvertiserService', 'method': 'calculateDailyTargetRateAbtestPattern', 'description': 'The method calculateDailyTargetRateAbtestPattern() has a Cyclomatic Complexity of 27. The configured cyclomatic complexity threshold is 15.', 'rule': 'CyclomaticComplexity', 'ruleSet': 'Code Size Rules', 'externalInfoUrl': 'https://phpmd.org/rules/codesize.html#cyclomaticcomplexity', 'priority': 1}, {'beginLine': 1303, 'endLine': 1412, 'package': 'App\\Services', 'function': None, 'class': 'AdvertiserService', 'method': 'calculateWeeklyUgcSetAbtestPatterns', 'description': 'The method calculateWeeklyUgcSetAbtestPatterns() has a Cyclomatic Complexity of 33. The configured cyclomatic complexity threshold is 15.', 'rule': 'CyclomaticComplexity', 'ruleSet': 'Code Size Rules', 'externalInfoUrl': 'https://phpmd.org/rules/codesize.html#cyclomaticcomplexity', 'priority': 1}, {'beginLine': 1456, 'endLine': 1551, 'package': 'App\\Services', 'function': None, 'class': 'AdvertiserService', 'method': 'prepareUgcSetAbtestPatternsGroupByPeriod', 'description': 'The method prepareUgcSetAbtestPatternsGroupByPeriod() has a Cyclomatic Complexity of 22. The configured cyclomatic complexity threshold is 15.', 'rule': 'CyclomaticComplexity', 'ruleSet': 'Code Size Rules', 'externalInfoUrl': 'https://phpmd.org/rules/codesize.html#cyclomaticcomplexity', 'priority': 1}]}]}
+    if enableCsv:
+        print(f'{cc},{name}')
+    else:
+        print(f'{name}: {cc}')
