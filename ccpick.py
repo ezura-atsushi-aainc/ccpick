@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import List, Set, Dict, Any
 import argparse
 import json
+import os
 import subprocess
 import sys
 
@@ -22,7 +23,10 @@ ccThreshold: int = args.threshold
 dir = Path(repoRoot)
 php_files = dir.rglob('*.php')
 
-phpmdBinPath = ('' if phpmdPath is None else phpmdPath + '/') + 'phpmd'
+phpmdBinPath = ('' if phpmdPath is None else phpmdPath.rstrip('/') + '/') + 'phpmd'
+if not os.access(phpmdBinPath, os.X_OK):
+    print(f'Cannot execute {phpmdBinPath}')
+    sys.exit(1)
 
 # Initialize for report violations
 class_cyclomatic_complexity = {}
