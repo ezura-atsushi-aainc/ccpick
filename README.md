@@ -1,3 +1,6 @@
+# Requirement
+1. `Python` >= 3.7
+2. `phpmd` as executable
 # How to run
 ```
 $ python ccpick.py --threshold 20 --repo-root ~/repos/path/to/product/app
