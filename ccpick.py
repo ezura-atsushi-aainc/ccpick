@@ -92,7 +92,7 @@ def main():
                 "" if violation["description"] is None else violation["description"]
             )
 
-            cc_name = cc_package + "\\" + cc_class + "\\" + cc_method
+            cc_name = cc_package + "\\" + cc_class + "::" + cc_method + "()"
 
             # parse description
             words = cc_desc.split(" ")
